@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <style>
+        .hrd-box {
+            position: relative;
+            width: 402px;
+            height: 502px;
+            background: #ccc;
+            border: 2px solid #666
+        }
+        
+        .hrd-box .checker.on {
+            z-index: 22
+        }
+        
+        .hrd-box .checker {
+            position: absolute;
+            background: rgb(122, 50, 2);
+            border: 1px solid #ff0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #fff;
+            transition: top 0.6s, left 0.6s;
+        }
+        
+        .hrd-box .checker .btns {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+        
+        .hrd-box .checker span {
+            display: flex;
+            border: #ff0 100% solid;
+            border-radius: 50%;
+            transition: opacity 0.6s;
+            flex-direction: column;
+            justify-content: center;
+            position: absolute;
+            background: rgb(230, 200, 152);
+            width: 100%;
+            height: 50px;
+            cursor: pointer;
+        }
+        
+        .hrd-box .checker span.top {
+            top: -50px;
+        }
+        
+        .hrd-box .checker span.bottom {
+            bottom: -50px;
+        }
+        
+        .hrd-box .checker span.left {
+            left: -50px;
+            height: 100%;
+            top: 0;
+            width: 50px;
+        }
+        
+        .hrd-box .checker span.right {
+            right: -50px;
+            top: 0;
+            height: 100%;
+            width: 50px;
+        }
+        
+        .w1h2 {
+            height: 200px;
+            width: 100px;
+        }
+        
+        .w1h1 {
+            height: 100px;
+            width: 100px;
+        }
+        
+        .w2h2 {
+            width: 200px;
+            height: 200px;
+        }
+        
+        .w2h1 {
+            width: 200px;
+            height: 100px;
+        }
+        
+        #id1 {
+            top: 0;
+            left: 0
+        }
+        
+        #id2 {
+            top: 0;
+            left: 100px
+        }
+        
+        #id3 {
+            top: 0;
+            left: 300px
+        }
+        
+        #id4 {
+            top: 200px;
+            left: 0
+        }
+        
+        #id5 {
+            top: 200px;
+            left: 100px;
+        }
+        
+        #id6 {
+            top: 200px;
+            left: 0px;
+        }
+        
+        #id7 {
+            top: 200px;
+            left: 300px;
+        }
+        
+        #id8 {
+            top: 300px;
+            left: 100px;
+        }
+        
+        #id9 {
+            top: 300px;
+            left: 200px;
+        }
+        
+        #id10 {
+            top: 400px;
+            left: 000px;
+        }
+        
+        #id11 {
+            top: 400px;
+            left: 300px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hrd-box">
+        <div class="checker w1h2" data-top="0" data-left="0" data-w="1" data-h="2" id="id1">1</div>
+        <div class="checker w2h2" data-top="0" data-left="1" data-w="2" data-h="2" id="id2">2</div>
+        <div class="checker w1h2" data-top="0" data-left="3" data-w="1" data-h="2" id="id3">3</div>
+        <!-- <div class="checker w2h1" data-top="2" data-left="0" data-w="2" data-h="1" id="id4">4</div> -->
+        <div class="checker w2h1" data-top="2" data-left="1" data-w="2" data-h="1" id="id5">5</div>
+        <div class="checker w1h2" data-top="2" data-left="0" data-w="1" data-h="2" id="id6">6</div>
+        <div class="checker w1h2" data-top="2" data-left="3" data-w="1" data-h="2" id="id7">7</div>
+        <div class="checker w1h1" data-top="3" data-left="1" data-w="1" data-h="1" id="id8">8</div>
+        <div class="checker w1h1" data-top="3" data-left="2" data-w="1" data-h="1" id="id9">9</div>
+        <div class="checker w1h1" data-top="4" data-left="0" data-w="1" data-h="1" id="id10">10</div>
+        <div class="checker w1h1" data-top="4" data-left="3" data-w="1" data-h="1" id="id11">11</div>
+    </div>
+    <div class="btn-list">
+        <button class="back">后退</button>
+        <button class="front">前进</button>
+        <button class="restart">重新开始</button>
+        <button class="auto">自动</button>
+    </div>
+    <!-- <div class="img"><img src="1.jpg" alt=""></div> -->
+
+</body>
+<script>
+    var g = {
+        top: function() {
+            this.top
+        },
+        left: function() {},
+        right: function() {},
+        bottom: function() {},
+    }
+    jQuery(function() {
+        var checkerboardInit = [
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 1, 1, 1],
+            [1, 0, 0, 1]
+        ];
+        var checkerboard = checkerboardInit
+        var autoArr = [
+            ["id11", "left"],
+            ["id7", "bottom"],
+            ["id5", "right"],
+            ["id8", "bottom"],
+            ["id6", "right"],
+            ["id10", "top"],
+            ["id8", "left"],
+            ["id6", "bottom"],
+            ["id5", "left"],
+            ["id5", "left"],
+            ["id9", "top"],
+            ["id9", "right"],
+            ["id11", "top"],
+            ["id11", "top"],
+            ["id6", "right"],
+            ["id10", "right"],
+            ["id10", "bottom"],
+            ["id5", "bottom"],
+            ["id11", "left"],
+            ["id11", "left"],
+            ["id9", "left"],
+            ["id9", "left"],
+            ["id6", "top"],
+            ["id7", "top"],
+            ["id10", "right"],
+            ["id10", "right"],
+            ["id8", "right"],
+            ["id8", "right"],
+            ["id5", "bottom"],
+            ["id9", "bottom"],
+            ["id9", "left"],
+            ["id6", "left"],
+            ["id7", "left"],
+            ["id3", "bottom"],
+            ["id3", "bottom"],
+            ["id2", "right"],
+            ["id1", "right"],
+            ["id11", "top"],
+            ["id11", "top"],
+            ["id9", "top"],
+            ["id9", "top"],
+            ["id6", "left"],
+            ["id1", "bottom"],
+            ["id1", "bottom"],
+            ["id2", "left"],
+            ["id3", "top"],
+            ["id3", "top"],
+            ["id7", "right"],
+            ["id8", "top"],
+            ["id8", "top"],
+            ["id10", "left"],
+            ["id10", "top"],
+            ["id5", "right"],
+            ["id5", "right"],
+            ["id6", "bottom"],
+            ["id1", "bottom"],
+            ["id8", "left"],
+            ["id8", "left"],
+            ["id2", "bottom"],
+            ["id11", "right"],
+            ["id11", "right"],
+            ["id9", "top"],
+            ["id9", "right"],
+            ["id8", "top"],
+            ["id8", "top"],
+            ["id6", "top"],
+            ["id6", "top"],
+            ["id1", "left"],
+            ["id10", "left"],
+            ["id10", "bottom"],
+            ["id2", "bottom"],
+            ["id11", "bottom"],
+            ["id11", "left"],
+            ["id3", "left"],
+            ["id7", "top"],
+            ["id7", "top"],
+            ["id2", "right"],
+            ["id11", "bottom"],
+            ["id9", "bottom"],
+            ["id8", "right"],
+            ["id6", "top"],
+            ["id1", "top"],
+            ["id10", "left"],
+            ["id11", "bottom"],
+            ["id11", "bottom"],
+            ["id2", "left"],
+            ["id7", "bottom"],
+            ["id7", "bottom"],
+            ["id3", "right"],
+            ["id8", "right"],
+            ["id9", "right"],
+            ["id6", "right"],
+            ["id1", "top"],
+            ["id1", "top"],
+            ["id2", "left"],
+            ["id9", "bottom"],
+            ["id9", "bottom"],
+            ["id8", "bottom"],
+            ["id8", "bottom"],
+            ["id3", "left"],
+            ["id7", "top"],
+            ["id7", "top"],
+            ["id9", "right"],
+            ["id9", "top"],
+            ["id5", "top"],
+            ["id11", "right"],
+            ["id11", "right"],
+            ["id10", "right"],
+            ["id10", "right"],
+            ["id2", "bottom"],
+            ["id8", "left"],
+            ["id8", "left"],
+            ["id9", "left"],
+            ["id9", "left"],
+            ["id5", "top"],
+            ["id10", "top"],
+            ["id10", "right"],
+            ["id2", "right"]
+        ]
+        var record = []; // 历史记录
+        var backRecord = []; // 后退记录
+        var pointer = -1;
+        // 撤销用
+        var moveObj = {
+            'top': 'bottom',
+            'bottom': 'top',
+            'left': 'right',
+            'right': 'left'
+        }
+        var unit = 100
+        var htmlArr = ['<span class="top">↑</span>', '<span class="bottom">↓</span>', ]
+        var htmlObj = {
+            top: '<span class="top">↑</span>',
+            bottom: '<span class="bottom">↓</span>',
+            left: '<span class="left">←</span>',
+            right: '<span class="right">→</span>'
+        }
+        var html = '<span class="top">↑</span>\
+            <span class="bottom">↓</span>\
+            <span class="left">←</span>\
+            <span class="right">→</span>'
+
+        function autoFn(arr) {
+            var a = arr.shift()
+            var id = a[0]
+            var move = a[1]
+            btnFn($('#' + id), move)
+            arr.length
+            if (!arr.length) {
+                return;
+            }
+            setTimeout(function() {
+                autoFn(arr)
+            }, 300);
+        }
+
+        /* 方向按钮 */
+        $('.auto').on('click', function() {
+            autoFn(autoArr)
+        })
+        $('.hrd-box').on('click', 'span', function() {
+            var $div = $(this).parent().parent()
+            var move = $(this).attr('class')
+            console.log($div)
+            btnFn($div, move)
+        });
+        /* 重新开始 */
+        $('.restart').on('click', function() {
+            checkerboard = checkerboardInit
+            record = []; // 历史记录
+            backRecord = []; // 后退记录
+            pointer = -1;
+            console.log(checkerboard)
+            $('#id1').css({
+                top: 0,
+                left: 0
+            })
+            $('#id2').css({
+                top: 0,
+                left: '100px'
+            })
+            $('#id3').css({
+                top: 0,
+                left: '300px'
+            })
+            $('#id5').css({
+                top: '200px',
+                left: '100px'
+            })
+            $('#id6').css({
+                top: '200px',
+                left: '000px'
+            })
+            $('#id7').css({
+                top: '200px',
+                left: '300px'
+            })
+            $('#id8').css({
+                top: '300px',
+                left: '100px'
+            })
+            $('#id9').css({
+                top: '300px',
+                left: '200px'
+            })
+            $('#id10').css({
+                top: '400px',
+                left: '000px'
+            })
+            $('#id11').css({
+                top: '400px',
+                left: '300px'
+            })
+        });
+        /* 撤销按钮 */
+        $('.back').on('click', function() {
+            if (record.length == 0) {
+                return
+            }
+            if (pointer == -1) {
+                pointer = record.length - 1
+            }
+            var id = record[pointer][0]
+            var move = record[pointer][1]
+            btnFn($('#' + id), moveObj[move], 'm')
+            backRecord.push(record.pop())
+            pointer--;
+            console.log(backRecord)
+
+        })
+
+        /* 前进按钮 */
+        $('.front').on('click', function() {
+
+            if (!backRecord.length) {
+                return
+            }
+            pointer++;
+            console.log(pointer)
+            var a = backRecord.pop()
+            var id = a[0]
+            var move = a[1]
+            btnFn($('#' + id), move)
+
+        })
+
+        function btnFn($div, move, m) {
+            var w = $div.data('w');
+            var h = $div.data('h');
+            var top = $div.data('top');
+            var left = $div.data('left');
+            var csstop = $div.css('top').replace(/px/g, '');
+            var cssleft = $div.css('left').replace(/px/g, '');
+
+            console.log(checkerboard)
+
+            if (move == ('right')) {
+                if (w == 1 && h == 1) {
+                    if (checkerboard[top][left + 1] === 0) {
+                        console.log(111)
+                        checkerboard[top][left] = 0
+                        checkerboard[top][left + 1] = 1
+                        $div.data('left', left + 1)
+                        $div.css('left', (left + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'right'])
+                        }
+                    }
+                } else if (w == 1 && h == 2) {
+                    if (checkerboard[top][left + 1] == 0 && checkerboard[top + 1][left + 1] == 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top + 1][left] = 0
+                        checkerboard[top][left + 1] = 1
+                        checkerboard[top + 1][left + 1] = 1
+                        $div.data('left', left + 1)
+                        $div.css('left', (left + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'right'])
+                        }
+                    }
+
+                } else if (w == 2 && h == 2) {
+                    if (checkerboard[top][left + 2] == 0 && checkerboard[top + 1][left + 2] == 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top + 1][left] = 0
+                        checkerboard[top][left + 2] = 1
+                        checkerboard[top + 1][left + 2] = 1
+                        $div.data('left', left + 1)
+                        $div.css('left', (left + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'right'])
+                        }
+                    }
+                } else if (w == 2 && h == 1) {
+                    if (checkerboard[top][left + 2] == 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top][left + 2] = 1
+                        $div.data('left', left + 1)
+                        $div.css('left', (left + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'right'])
+                        }
+                    }
+
+                }
+            }
+            if (move == ('left')) {
+                if (w == 1 && h == 1) {
+                    if (checkerboard[top][left - 1] == 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top][left - 1] = 1
+                        $div.data('left', left - 1)
+                        $div.css('left', (left - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'left'])
+                        }
+                    }
+                } else if (w == 1 && h == 2) {
+                    if (checkerboard[top][left - 1] == 0 && checkerboard[top + 1][left - 1] == 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top + 1][left] = 0
+                        checkerboard[top][left - 1] = 1
+                        checkerboard[top + 1][left - 1] = 1
+                        $div.data('left', left - 1)
+                        $div.css('left', (left - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'left'])
+                        }
+                    }
+
+                } else if (w == 2 && h == 2) {
+                    if (checkerboard[top][left - 1] == 0 && checkerboard[top + 1][left - 1] == 0) {
+                        checkerboard[top][left + 1] = 0
+                        checkerboard[top + 1][left + 1] = 0
+                        checkerboard[top][left - 1] = 1
+                        checkerboard[top + 1][left - 1] = 1
+                        $div.data('left', left - 1)
+                        $div.css('left', (left - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'left'])
+                        }
+                    }
+                } else if (w == 2 && h == 1) {
+                    if (checkerboard[top][left - 1] == 0) {
+                        checkerboard[top][left + 1] = 0
+                        checkerboard[top][left - 1] = 1
+                        $div.data('left', left - 1)
+                        $div.css('left', (left - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'left'])
+                        }
+                    }
+
+                }
+            }
+            if (move == ('top')) {
+                if (w == 1 && h == 1) {
+                    if (checkerboard[top - 1] && checkerboard[top - 1][left] == 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top - 1][left] = 1
+                        $div.data('top', top - 1)
+                        $div.css('top', (top - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'top'])
+                        }
+
+                    }
+                } else if (w == 1 && h == 2) {
+                    if (checkerboard[top - 1] && checkerboard[top - 1][left] == 0) {
+                        checkerboard[top + 1][left] = 0
+                        checkerboard[top - 1][left] = 1
+                        $div.data('top', top - 1)
+                        $div.css('top', (top - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'top'])
+                        }
+                    }
+
+                } else if (w == 2 && h == 2) {
+                    if (checkerboard[top - 1] && checkerboard[top - 1][left] === 0 && checkerboard[top - 1][left + 1] === 0) {
+                        checkerboard[top + 1][left] = 0
+                        checkerboard[top + 1][left + 1] = 0
+                        checkerboard[top - 1][left] = 1
+                        checkerboard[top - 1][left + 1] = 1
+                        $div.data('top', top - 1)
+                        $div.css('top', (top - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record[pointer] = ([$div.attr('id'), 'top'])
+                        }
+                    }
+                } else if (w == 2 && h == 1) {
+                    if (checkerboard[top - 1] && checkerboard[top - 1][left] === 0 && checkerboard[top - 1][left + 1] === 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top][left + 1] = 0
+                        checkerboard[top - 1][left] = 1
+                        checkerboard[top - 1][left + 1] = 1
+                        $div.data('top', top - 1)
+                        $div.css('top', (top - 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'top'])
+                        }
+                    }
+
+                }
+            }
+            if (move == ('bottom')) {
+                console.log(checkerboard[top + 1][left])
+                    // console.log(csstop + unit)
+                console.log(top, left)
+                if (w == 1 && h == 1) {
+                    if (checkerboard[top + 1][left] === 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top + 1][left] = 1
+
+                        $div.data('top', top + 1)
+                        $div.css('top', (top + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'bottom'])
+                        }
+
+                    }
+                } else if (w == 1 && h == 2) {
+                    if (checkerboard[top + 2][left] === 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top + 2][left] = 1
+                        $div.data('top', top + 1)
+                        $div.css('top', (top + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'bottom'])
+                        }
+                    }
+
+                } else if (w == 2 && h == 2) {
+                    if (checkerboard[top + 2][left] === 0 && checkerboard[top + 2][left + 1] === 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top][left + 1] = 0
+                        checkerboard[top + 2][left] = 1
+                        checkerboard[top + 2][left + 1] = 1
+                        $div.data('top', top + 1)
+                        $div.css('top', (top + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'bottom'])
+                        }
+                    }
+                } else if (w == 2 && h == 1) {
+                    if (checkerboard[top + 1][left] === 0 && checkerboard[top + 1][left + 1] === 0) {
+                        checkerboard[top][left] = 0
+                        checkerboard[top][left + 1] = 0
+                        checkerboard[top + 1][left] = 1
+                        checkerboard[top + 1][left + 1] = 1
+                        $div.data('top', top + 1)
+                        $div.css('top', (top + 1) * (unit))
+                        if (m != 'm') {
+                            pointer = record.length
+                            record.push([$div.attr('id'), 'bottom'])
+                        }
+                    }
+
+                }
+
+                console.log('bottom')
+            }
+            console.log(checkerboard)
+            console.log(record)
+        }
+
+        function htmlFn(_this) {
+            $(_this).siblings().removeClass('on').find('span').remove()
+            var $div = $(_this)
+            var w = $div.data('w');
+            var h = $div.data('h');
+            var top = $div.data('top');
+            var left = $div.data('left');
+            var html = ''
+            if (w == 1 && h == 1) {
+
+                if (checkerboard[top][left + 1] === 0) {
+                    html += htmlObj.right
+                }
+                if (checkerboard[top][left - 1] === 0) {
+                    html += htmlObj.left
+                }
+                if (checkerboard[top - 1] && checkerboard[top - 1][left] === 0) {
+                    html += htmlObj.top
+                }
+                if (checkerboard[top + 1] && checkerboard[top + 1][left] === 0) {
+                    html += htmlObj.bottom
+                }
+            } else if (w == 1 && h == 2) {
+
+
+                if (checkerboard[top][left + 1] === 0 && checkerboard[top + 1][left + 1] === 0) {
+                    html += htmlObj.right
+                }
+                if (checkerboard[top][left - 1] === 0 && checkerboard[top + 1][left - 1] === 0) {
+                    html += htmlObj.left
+                }
+                if (checkerboard[top - 1] && checkerboard[top - 1][left] === 0) {
+                    html += htmlObj.top
+                }
+                if (checkerboard[top + 2] && checkerboard[top + 2][left] === 0) {
+                    html += htmlObj.bottom
+                }
+
+            } else if (w == 2 && h == 2) {
+
+
+                if (checkerboard[top][left + 2] === 0 && checkerboard[top + 1][left + 2] === 0) {
+                    html += htmlObj.right
+                }
+                if (checkerboard[top][left - 1] === 0 && checkerboard[top + 1][left - 1] === 0) {
+                    html += htmlObj.left
+                }
+                if (checkerboard[top - 1] && checkerboard[top - 1][left] === 0 && checkerboard[top - 1][left + 1] === 0) {
+                    html += htmlObj.top
+                }
+                if (checkerboard[top + 2] && checkerboard[top + 2][left] === 0 && checkerboard[top + 2][left + 1] === 0) {
+                    html += htmlObj.bottom
+                }
+            } else if (w == 2 && h == 1) {
+                if (checkerboard[top][left + 2] === 0) {
+                    html += htmlObj.right
+                }
+                if (checkerboard[top][left - 1] === 0) {
+                    html += htmlObj.left
+                }
+                if (checkerboard[top - 1] && checkerboard[top - 1][left] === 0 && checkerboard[top - 1][left + 1] === 0) {
+                    html += htmlObj.top
+                }
+                if (checkerboard[top + 1] && checkerboard[top + 1][left] === 0 && checkerboard[top + 1][left + 1] === 0) {
+                    html += htmlObj.bottom
+                }
+
+            }
+
+            if (!$(_this).find('.btns').length || !(html == $(_this).find('.btns').html())) {
+                html = '<div class="btns">' + html + '</div>'
+                $(_this).addClass('on')
+                $(_this).find('.btns').remove()
+                $(_this).append(html)
+            }
+        }
+        $('.hrd-box').on('mouseover', '.checker', function() {
+            console.log('mouseover')
+            clearTimeout(timeF)
+            htmlFn(this)
+        })
+
+        var timeF = null
+        $('.hrd-box').on('mouseover', 'span', function() {
+            clearTimeout(timeF)
+        })
+        $('.hrd-box').on('mouseout', '.checker', function() {
+            console.log('mouseout')
+            var $div = $(this)
+            clearTimeout(timeF)
+
+            timeF = setTimeout(function() {
+                $div.removeClass('on').find('span').remove()
+            }, 500);
+
+        })
+
+    })
+</script>
+
+</html>
