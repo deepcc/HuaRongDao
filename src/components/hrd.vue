@@ -1,13 +1,11 @@
 <template>
   <div class="hrd">
-    <div class="hrd-box">
-        
-        
+    <div class="hrd-box" @mouseout="mouseoutFn">
         <!-- v-bind:class="{w1h1:item.classname=='w1h1',w1h2:item.classname=='w1h2,w2h2:item.classname=='w2h2',w2h1:item.classname=='w2h1'}"  -->
         <div v-for="(item,i) in hrdObj"
             :class="['checker', ('w'+item.w+'h'+item.h)]" 
             :id="'id'+(i+1)"
-            @mouseover="checkerOverFn(item)">11
+            @mouseover="checkerOverFn(item)">{{i+1}}
             <div :class="['btns',item.f]"  v-if="item.f">
                 <span class="top" @click="btnFn((i+1),'top')">↑</span>
                 <span class="bottom" @click="btnFn((i+1),'bottom')">↓</span>
@@ -19,10 +17,10 @@
     </div>
 
     <div class="btn-list">
-        <button class="back">后退</button>
-        <button class="front">前进</button>
-        <button class="restart">重新开始</button>
-        <button class="auto">自动</button>
+        <button class="back" @click="backFn()">后退</button>
+        <button class="front" @click="frontFn()">前进</button>
+        <button class="restart" @click="restartFn()">重新开始</button>
+        <button class="auto" @click="autoFn(autoArr)">自动</button>
     </div>
   </div>
 </template>
@@ -35,7 +33,6 @@
         data() {
             return {
                 hrdObj: [{
-                    id: 1,
                     top: 0,
                     left: 0,
                     w: 1,
@@ -43,42 +40,36 @@
                     f: 0
                 }, {
 
-                    id: 2,
                     top: 0,
                     left: 1,
                     w: 2,
                     h: 2,
                     f: 0
                 }, {
-                    id: 3,
                     top: 0,
                     left: 3,
                     w: 1,
                     h: 2,
                     f: 0
                 }, {
-                    id: 4,
                     top: 2,
                     left: 1,
                     w: 2,
                     h: 1,
                     f: 0
                 }, {
-                    id: 5,
                     top: 2,
                     left: 0,
                     w: 1,
                     h: 2,
                     f: 0
                 }, {
-                    id: 6,
                     top: 2,
                     left: 3,
                     w: 1,
                     h: 2,
                     f: 0
                 }, {
-                    id: 7,
                     top: 3,
                     left: 1,
                     w: 1,
@@ -86,7 +77,6 @@
                     f: 0
                 }, {
 
-                    id: 8,
                     top: 3,
                     left: 2,
                     w: 1,
@@ -94,7 +84,6 @@
                     f: 0
                 }, {
 
-                    id: 9,
                     top: 4,
                     left: 0,
                     w: 1,
@@ -102,7 +91,6 @@
                     f: 0
                 }, {
 
-                    id: 10,
                     top: 4,
                     left: 3,
                     w: 1,
@@ -125,126 +113,129 @@
                     [1, 1, 1, 1],
                     [1, 0, 0, 1]
                 ],
+
                 autoArr: [
-                    ["id11", "left"],
+                    ["id10", "left"],
+                    ["id6", "bottom"],
+                    ["id4", "right"],
                     ["id7", "bottom"],
                     ["id5", "right"],
-                    ["id8", "bottom"],
-                    ["id6", "right"],
-                    ["id10", "top"],
-                    ["id8", "left"],
-                    ["id6", "bottom"],
-                    ["id5", "left"],
-                    ["id5", "left"],
                     ["id9", "top"],
-                    ["id9", "right"],
-                    ["id11", "top"],
-                    ["id11", "top"],
-                    ["id6", "right"],
-                    ["id10", "right"],
-                    ["id10", "bottom"],
-                    ["id5", "bottom"],
-                    ["id11", "left"],
-                    ["id11", "left"],
-                    ["id9", "left"],
-                    ["id9", "left"],
-                    ["id6", "top"],
-                    ["id7", "top"],
-                    ["id10", "right"],
-                    ["id10", "right"],
-                    ["id8", "right"],
-                    ["id8", "right"],
-                    ["id5", "bottom"],
-                    ["id9", "bottom"],
-                    ["id9", "left"],
-                    ["id6", "left"],
                     ["id7", "left"],
+                    ["id5", "bottom"],
+                    ["id4", "left"],
+                    ["id4", "left"],
+                    ["id8", "top"],
+                    ["id8", "right"],
+                    ["id10", "top"],
+                    ["id10", "top"],
+                    ["id5", "right"],
+                    ["id9", "right"],
+                    ["id9", "bottom"],
+                    ["id4", "bottom"],
+                    ["id10", "left"],
+                    ["id10", "left"],
+                    ["id8", "left"],
+                    ["id8", "left"],
+                    ["id5", "top"],
+                    ["id6", "top"],
+                    ["id9", "right"],
+                    ["id9", "right"],
+                    ["id7", "right"],
+                    ["id7", "right"],
+                    ["id4", "bottom"],
+                    ["id8", "bottom"],
+                    ["id8", "left"],
+                    ["id5", "left"],
+                    ["id6", "left"],
                     ["id3", "bottom"],
                     ["id3", "bottom"],
                     ["id2", "right"],
                     ["id1", "right"],
-                    ["id11", "top"],
-                    ["id11", "top"],
-                    ["id9", "top"],
-                    ["id9", "top"],
-                    ["id6", "left"],
-                    ["id1", "bottom"],
-                    ["id1", "bottom"],
-                    ["id2", "left"],
-                    ["id3", "top"],
-                    ["id3", "top"],
-                    ["id7", "right"],
-                    ["id8", "top"],
-                    ["id8", "top"],
-                    ["id10", "left"],
                     ["id10", "top"],
-                    ["id5", "right"],
-                    ["id5", "right"],
-                    ["id6", "bottom"],
+                    ["id10", "top"],
+                    ["id8", "top"],
+                    ["id8", "top"],
+                    ["id5", "left"],
                     ["id1", "bottom"],
-                    ["id8", "left"],
-                    ["id8", "left"],
-                    ["id2", "bottom"],
-                    ["id11", "right"],
-                    ["id11", "right"],
-                    ["id9", "top"],
-                    ["id9", "right"],
-                    ["id8", "top"],
-                    ["id8", "top"],
-                    ["id6", "top"],
-                    ["id6", "top"],
-                    ["id1", "left"],
-                    ["id10", "left"],
-                    ["id10", "bottom"],
-                    ["id2", "bottom"],
-                    ["id11", "bottom"],
-                    ["id11", "left"],
-                    ["id3", "left"],
-                    ["id7", "top"],
-                    ["id7", "top"],
-                    ["id2", "right"],
-                    ["id11", "bottom"],
-                    ["id9", "bottom"],
-                    ["id8", "right"],
-                    ["id6", "top"],
-                    ["id1", "top"],
-                    ["id10", "left"],
-                    ["id11", "bottom"],
-                    ["id11", "bottom"],
+                    ["id1", "bottom"],
                     ["id2", "left"],
-                    ["id7", "bottom"],
-                    ["id7", "bottom"],
-                    ["id3", "right"],
-                    ["id8", "right"],
-                    ["id9", "right"],
+                    ["id3", "top"],
+                    ["id3", "top"],
                     ["id6", "right"],
+                    ["id7", "top"],
+                    ["id7", "top"],
+                    ["id9", "left"],
+                    ["id9", "top"],
+                    ["id4", "right"],
+                    ["id4", "right"],
+                    ["id5", "bottom"],
+                    ["id1", "bottom"],
+                    ["id7", "left"],
+                    ["id7", "left"],
+                    ["id2", "bottom"],
+                    ["id10", "right"],
+                    ["id10", "right"],
+                    ["id8", "top"],
+                    ["id8", "right"],
+                    ["id7", "top"],
+                    ["id7", "top"],
+                    ["id5", "top"],
+                    ["id5", "top"],
+                    ["id1", "left"],
+                    ["id9", "left"],
+                    ["id9", "bottom"],
+                    ["id2", "bottom"],
+                    ["id10", "bottom"],
+                    ["id10", "left"],
+                    ["id3", "left"],
+                    ["id6", "top"],
+                    ["id6", "top"],
+                    ["id2", "right"],
+                    ["id10", "bottom"],
+                    ["id8", "bottom"],
+                    ["id7", "right"],
+                    ["id5", "top"],
+                    ["id1", "top"],
+                    ["id9", "left"],
+                    ["id10", "bottom"],
+                    ["id10", "bottom"],
+                    ["id2", "left"],
+                    ["id6", "bottom"],
+                    ["id6", "bottom"],
+                    ["id3", "right"],
+                    ["id7", "right"],
+                    ["id8", "right"],
+                    ["id5", "right"],
                     ["id1", "top"],
                     ["id1", "top"],
                     ["id2", "left"],
-                    ["id9", "bottom"],
-                    ["id9", "bottom"],
                     ["id8", "bottom"],
                     ["id8", "bottom"],
+                    ["id7", "bottom"],
+                    ["id7", "bottom"],
                     ["id3", "left"],
-                    ["id7", "top"],
-                    ["id7", "top"],
+                    ["id6", "top"],
+                    ["id6", "top"],
+                    ["id8", "right"],
+                    ["id8", "top"],
+                    ["id4", "top"],
+                    ["id10", "right"],
+                    ["id10", "right"],
                     ["id9", "right"],
-                    ["id9", "top"],
-                    ["id5", "top"],
-                    ["id11", "right"],
-                    ["id11", "right"],
-                    ["id10", "right"],
-                    ["id10", "right"],
+                    ["id9", "right"],
                     ["id2", "bottom"],
+                    ["id7", "left"],
+                    ["id7", "left"],
                     ["id8", "left"],
                     ["id8", "left"],
-                    ["id9", "left"],
-                    ["id9", "left"],
-                    ["id5", "top"],
-                    ["id10", "top"],
-                    ["id10", "right"],
+                    ["id4", "top"],
+                    ["id9", "top"],
+                    ["id9", "right"],
                     ["id2", "right"]
                 ],
+
+
                 record: [], // 历史记录
                 backRecord: [], // 后退记录
                 pointer: -1,
@@ -264,42 +255,39 @@
                     'right': ' showright'
                 },
                 html: '<span class="top">↑</span>\
-            <span class="bottom">↓</span>\
-            <span class="left">←</span>\
-            <span class="right">→</span>'
+                    <span class="bottom">↓</span>\
+                    <span class="left">←</span>\
+                    <span class="right">→</span>'
 
             }
         },
         methods: {
+            /* 自动运行 */
             autoFn(arr) {
                 var a = arr.shift()
-                var id = a[0]
+                var id = a[0].replace(/id/, '')
                 var move = a[1]
-                btnFn($('#' + id), move)
+                var _this = this;
+                _this.btnFn(id, move)
                 arr.length
                 if (!arr.length) {
                     return;
                 }
                 setTimeout(function() {
-                    autoFn(arr)
+                    _this.autoFn(arr)
                 }, 300);
             },
-            spanFn(_t) {
 
-                var $div = $(_t).parent().parent()
-                var move = $(_t).attr('class')
-
-                console.log(_t)
-                console.log($div)
-                this.btnFn($div, move)
-            },
             /* 重新开始 */
             restartFn() {
-                checkerboard = checkerboardInit
+                this.checkerboard = this.checkerboardInit
                 this.record = []; // 历史记录
                 this.backRecord = []; // 后退记录
                 this.pointer = -1;
-                console.log(checkerboard)
+                console.log('this.checkerboardInit')
+                console.log(this.checkerboardInit)
+                console.log('this.checkerboard')
+                console.log(this.checkerboard)
                 $('#id1').css({
                     top: 0,
                     left: 0
@@ -312,36 +300,36 @@
                     top: 0,
                     left: '300px'
                 })
-                $('#id5').css({
+                $('#id4').css({
                     top: '200px',
                     left: '100px'
+                })
+                $('#id5').css({
+                    top: '200px',
+                    left: '000px'
                 })
                 $('#id6').css({
                     top: '200px',
-                    left: '000px'
-                })
-                $('#id7').css({
-                    top: '200px',
                     left: '300px'
                 })
-                $('#id8').css({
+                $('#id7').css({
                     top: '300px',
                     left: '100px'
                 })
-                $('#id9').css({
+                $('#id8').css({
                     top: '300px',
                     left: '200px'
                 })
-                $('#id10').css({
+                $('#id9').css({
                     top: '400px',
                     left: '000px'
                 })
-                $('#id11').css({
+                $('#id10').css({
                     top: '400px',
                     left: '300px'
                 })
             },
-            /* 撤销按钮 */
+            /* 后退按钮 */
             backFn() {
                 if (this.record.length == 0) {
                     return
@@ -351,7 +339,7 @@
                 }
                 var id = this.record[this.pointer][0]
                 var move = this.record[this.pointer][1]
-                btnFn($('#' + id), moveObj[move], 'm')
+                this.btnFn(id, this.moveObj[move], 'm')
                 this.backRecord.push(this.record.pop())
                 this.pointer--;
                 console.log(this.backRecord)
@@ -369,46 +357,36 @@
                 var a = this.backRecord.pop()
                 var id = a[0]
                 var move = a[1]
-                this.btnFn($('#' + id), move)
+                this.btnFn(id, move)
 
             },
-
+            /* 棋子移动 */
             btnFn(id, move, m) {
                 var $div = $('#id' + id)
-                    // var w = $div.data('w');
-                    // var h = $div.data('h');
-                    // var top = $div.data('top');
-                    // var left = $div.data('left');
+                var unit = this.unit
                 var t = this.hrdObj[id - 1]
-                console.log(id, t)
                 var w = t.w;
                 var h = t.h;
                 var top = t.top;
                 var left = t.left;
-                console.log($div)
-                var unit = this.unit
                 var csstop = t.top * this.unit;
                 var cssleft = t.left * this.unit;
-                // var csstop = $div.css('top').replace(/px/g, '');
-                // var cssleft = $div.css('left').replace(/px/g, '');
 
                 console.log(this.checkerboard)
                 var _this = this;
 
                 function btnMoveFn(num, orient) {
                     if (orient == 'left' || orient == 'right') {
-
-                        $div.data('left', num)
+                        _this.hrdObj[id - 1].left = num
                         $div.css('left', (num) * (unit))
                     } else {
-
-                        $div.data('top', num)
+                        _this.hrdObj[id - 1].top = num
                         $div.css('top', (num) * (unit))
                     }
 
                     if (m != 'm') {
                         _this.pointer = _this.record.length
-                        _this.record.push([$div.attr('id'), orient])
+                        _this.record.push([id, orient])
                     }
 
                 }
@@ -559,13 +537,13 @@
 
             htmlFn(o) {
                 console.log(o)
+                console.log(this.checkerboard)
                     // $(_this).siblings().removeClass('on').find('span').remove()
                     // var $div = $(_this)
                     // var w = $div.data('w');
                     // var h = $div.data('h');
                     // var top = $div.data('top');
                     // var left = $div.data('left');
-                console.log(this.checkerboard)
                 var w = o.w;
                 var h = o.h;
                 var top = o.top;
@@ -590,7 +568,6 @@
                         html += this.htmlObj.bottom
                     }
                 } else if (w == 1 && h == 2) {
-
 
                     if (this.checkerboard[top][left + 1] === 0 && this.checkerboard[top + 1][left + 1] === 0) {
                         html += this.htmlObj.right
@@ -652,6 +629,12 @@
             // var this.timeF = null
             spanOverFn() {
                 clearTimeout(this.timeF)
+            },
+            mouseoutFn() {
+                for (let i = 0; i < this.hrdObj.length; i++) {
+                    this.hrdObj[i].f = 0
+
+                }
             },
             checkerOutFn() {
                 console.log('mouseout')
