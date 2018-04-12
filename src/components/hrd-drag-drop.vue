@@ -1,12 +1,13 @@
 <template>
   <div class="hrd">
     <div class="hrd-box" @drop="drop($event)" @dragover="allowDrop($event)" >
-        <div  draggable="true" 
-            v-for="(item,i) in hrdObj"
+        <div draggable="true" 
+            v-for="(item,i) in hrdObj" 
+            :key="i"
             @dragstart="drag($event,item,i)" 
             :class="['checker', ('w'+item.w+'h'+item.h)]" 
             :id="'id'+(i+1)"
-            >{{i+1}}
+            >{{hrdNameArr[i]}}
              
         </div>
  
@@ -26,8 +27,10 @@
         // el: '.hrd',
         name: 'HelloWorld',
         data() {
+            // 张飞 曹操 马超 黄忠 关羽 赵云
             return {
                 startObj:{},
+                hrdNameArr:['张飞', '曹操', '马超', '黄忠', '关羽', '赵云', '兵', '兵', '兵', '兵' ],
                 hrdObj: [{
                     top: 0,
                     left: 0,

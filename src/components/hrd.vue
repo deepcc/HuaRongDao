@@ -5,7 +5,8 @@
         <div v-for="(item,i) in hrdObj"
             :class="['checker', ('w'+item.w+'h'+item.h)]" 
             :id="'id'+(i+1)"
-            @mouseover="checkerOverFn(item)">{{i+1}}
+            @mouseover="checkerOverFn(item)">
+            {{hrdNameArr[i]}}
             <div :class="['btns',item.f]"  v-if="item.f">
                 <span class="top" @click="btnFn((i+1),'top')">↑</span>
                 <span class="bottom" @click="btnFn((i+1),'bottom')">↓</span>
@@ -32,6 +33,8 @@
         name: 'HelloWorld',
         data() {
             return {
+
+                hrdNameArr:['张飞', '曹操', '马超', '关羽', '黄忠', '赵云', '兵', '兵', '兵', '兵' ],
                 hrdObj: [{
                     top: 0,
                     left: 0,
@@ -651,24 +654,29 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang="css" >
+body{
+        background: #F2EFE6;
+}
     .hrd-box {
         position: relative;
         width: 402px;
-        height: 502px;
-        background: #ccc;
-        border: 2px solid #666
+        height: 502px;margin: auto;
+        /* background: #edd0be; */
+        background: #f8f8f8;
+        border: 4px solid #ff3e3e
     }
-    
+    .btn-list{margin: 20px;}
     .hrd-box .checker.on {
         z-index: 22
     }
     
     .hrd-box .checker {
         position: absolute;
-        background: rgb(122, 50, 2);
-        border: 1px solid #ff0;
+        background: #24c6fc;
+    border: 1px solid #f8f8f8;
         text-align: center;
+        box-sizing: border-box;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -687,7 +695,8 @@
     .hrd-box .checker span {
         display: none;
         border: #ff0 100% solid;
-        border-radius: 50%;
+        /* border-radius: 40% 50% 50% 40%; */
+        font-weight: bold;
         transition: opacity 0.6s;
         flex-direction: column;
         justify-content: center;
@@ -700,18 +709,22 @@
     
     .hrd-box .checker .showtop span.top {
         display: flex;
+        border-radius:  70% 70%  0 0;
     }
     
     .hrd-box .checker .showbottom span.bottom {
         display: flex;
+        border-radius:   0 0 70% 70%;
     }
     
     .hrd-box .checker .showleft span.left {
         display: flex;
+        border-radius: 70%  0 0 70% ;
     }
     
     .hrd-box .checker .showright span.right {
         display: flex;
+        border-radius:  0 70% 70% 0 ;
     }
     
     .hrd-box .checker span.top {
@@ -737,23 +750,23 @@
     }
     
     .w1h2 {
-        height: 200px;
-        width: 100px;
+        height: 201px;
+        width: 101px;
     }
     
     .w1h1 {
-        height: 100px;
-        width: 100px;
+        height: 101px;
+        width: 101px;
     }
     
     .w2h2 {
-        width: 200px;
-        height: 200px;
+        width: 201px;
+        height: 201px;
     }
     
     .w2h1 {
-        width: 200px;
-        height: 100px;
+        width: 201px;
+        height: 101px;
     }
     
     #id1 {
