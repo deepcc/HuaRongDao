@@ -16,25 +16,33 @@
         </div>
 
     </div>
-
     <div class="btn-list">
-        <button class="back" @click="backFn()">后退</button>
-        <button class="front" @click="frontFn()">前进</button>
-        <button class="restart" @click="restartFn()">重新开始</button>
-        <button class="auto" @click="autoFn(autoArr)">自动</button>
+<el-row>
+  <el-button @click.native="backFn()" :disabled="!record.length">后退</el-button>
+  <el-button @click.native="frontFn()" :disabled="!backRecord.length">前进</el-button>
+  <el-button type="primary" @click.native="restartFn()">重新开始</el-button>
+  <el-button type="success" :disabled="!(checkerboardInit.join()==checkerboard.join())" @click.native="autoFn(autoArr)">自动运行</el-button>
+</el-row>
+        <!-- <button class="back">后退</button>
+        <button class="front">前进</button>
+        <button class="restart">重新开始</button>
+        <button class="auto">自动</button> -->
     </div>
   </div>
 </template>
 
 <script>
     import $ from 'jquery'
+    
+    
     export default {
-        // el: '.hrd',
+        // el: '.hrd', 
         name: 'HelloWorld',
         data() {
             return {
 
                 hrdNameArr:['张飞', '曹操', '马超', '关羽', '黄忠', '赵云', '兵', '兵', '兵', '兵' ],
+                hrdObjInit:[],
                 hrdObj: [{
                     top: 0,
                     left: 0,
@@ -102,13 +110,7 @@
                 }],
                 timeF: null,
                 // 初始化
-                checkerboardInit: [
-                    [1, 1, 1, 1],
-                    [1, 1, 1, 1],
-                    [1, 1, 1, 1],
-                    [1, 1, 1, 1],
-                    [1, 0, 0, 1]
-                ],
+                checkerboardInit: [],
                 checkerboard: [
                     [1, 1, 1, 1],
                     [1, 1, 1, 1],
@@ -116,7 +118,7 @@
                     [1, 1, 1, 1],
                     [1, 0, 0, 1]
                 ],
-
+                autoArrInit:[],
                 autoArr: [
                     ["id10", "left"],
                     ["id6", "bottom"],
@@ -264,33 +266,59 @@
 
             }
         },
+        created:function(){
+            var o = {}
+            var s=''
+            o.a=this.hrdObj
+            o.b=this.autoArr
+            o.c=this.checkerboard
+
+            s=JSON.stringify(o)
+            this.hrdObjInit=JSON.parse(s).a
+            this.autoArrInit=JSON.parse(s).b
+            this.checkerboardInit=JSON.parse(s).c
+            console.log('this.hrdObjInit',this.hrdObjInit)
+        },
         methods: {
             /* 自动运行 */
-            autoFn(arr) {
-                var a = arr.shift()
+            autoFn(autoArr2) {
+                var a = autoArr2.shift()
+                console.log(a,autoArr2)
                 var id = a[0].replace(/id/, '')
                 var move = a[1]
                 var _this = this;
                 _this.btnFn(id, move)
-                arr.length
-                if (!arr.length) {
+                console.log(autoArr2.length)
+                if (!autoArr2.length) {
                     return;
                 }
-                setTimeout(function() {
-                    _this.autoFn(arr)
+                this.timeAuto = setTimeout(function() {
+                    _this.autoFn(autoArr2)
                 }, 300);
             },
 
             /* 重新开始 */
             restartFn() {
-                this.checkerboard = this.checkerboardInit
+                clearTimeout(this.timeAuto)
                 this.record = []; // 历史记录
                 this.backRecord = []; // 后退记录
                 this.pointer = -1;
-                console.log('this.checkerboardInit')
-                console.log(this.checkerboardInit)
-                console.log('this.checkerboard')
-                console.log(this.checkerboard)
+
+                var o = {}
+                var s=''
+                o.a=this.hrdObjInit
+                o.b=this.autoArrInit
+                o.c=this.checkerboardInit
+                s=JSON.stringify(o)
+                this.hrdObj=JSON.parse(s).a
+                this.autoArr=JSON.parse(s).b
+                this.checkerboard=JSON.parse(s).c
+                // console.log('this.hrdObj',this.hrdObj)
+                // console.log('this.autoArr',this.autoArr)
+                // console.log('this.checkerboardInit')
+                // console.log(this.checkerboardInit)
+                // console.log('this.checkerboard')
+                // console.log(this.checkerboard)
                 $('#id1').css({
                     top: 0,
                     left: 0
@@ -352,7 +380,7 @@
             /* 前进按钮 */
             frontFn() {
 
-                if (!this.backRecord.length) {
+                if (this.backRecord.length==0) {
                     return
                 }
                 this.pointer++;
@@ -360,7 +388,7 @@
                 var a = this.backRecord.pop()
                 var id = a[0]
                 var move = a[1]
-                this.btnFn(id, move)
+                this.btnFn(id, move, 'f')
 
             },
             /* 棋子移动 */
@@ -372,12 +400,16 @@
                 var h = t.h;
                 var top = t.top;
                 var left = t.left;
+
+                console.log(id, top,left)
                 var csstop = t.top * this.unit;
                 var cssleft = t.left * this.unit;
 
-                console.log(this.checkerboard)
+                // console.log(this.checkerboard)
                 var _this = this;
-
+                if(m==undefined){
+                    this.backRecord=[]
+                }
                 function btnMoveFn(num, orient) {
                     if (orient == 'left' || orient == 'right') {
                         _this.hrdObj[id - 1].left = num
@@ -396,7 +428,7 @@
                 if (move == ('right')) {
                     if (w == 1 && h == 1) {
                         if (this.checkerboard[top][left + 1] === 0) {
-                            console.log(111)
+                            // console.log(111)
                             this.checkerboard[top][left] = 0
                             this.checkerboard[top][left + 1] = 1
                             btnMoveFn(left + 1, 'right')
@@ -495,9 +527,9 @@
                     }
                 }
                 if (move == ('bottom')) {
-                    console.log(this.checkerboard[top + 1][left])
-                        // console.log(csstop + unit)
-                    console.log(top, left)
+                    // console.log(this.checkerboard[top + 1][left])
+                    //     // console.log(csstop + unit)
+                    // console.log(top, left)
                     if (w == 1 && h == 1) {
                         if (this.checkerboard[top + 1][left] === 0) {
                             this.checkerboard[top][left] = 0
@@ -532,15 +564,15 @@
 
                     }
 
-                    console.log('bottom')
+                    // console.log('bottom')
                 }
-                console.log(this.checkerboard)
-                console.log(this.record)
+                // console.log(this.checkerboard)
+                // console.log(this.record)
             },
 
             htmlFn(o) {
-                console.log(o)
-                console.log(this.checkerboard)
+                // console.log(o)
+                // console.log(this.checkerboard)
                     // $(_this).siblings().removeClass('on').find('span').remove()
                     // var $div = $(_this)
                     // var w = $div.data('w');
@@ -624,9 +656,14 @@
                     // }
             },
             checkerOverFn(_t) {
-                console.log('mouseover')
+                // console.log('mouseover')
                 clearTimeout(this.timeF)
                 this.htmlFn(_t)
+
+                var top = _t.top;
+                var left = _t.left;
+
+                console.log( top,left)
             },
 
             // var this.timeF = null
@@ -636,7 +673,6 @@
             mouseoutFn() {
                 for (let i = 0; i < this.hrdObj.length; i++) {
                     this.hrdObj[i].f = 0
-
                 }
             },
             checkerOutFn() {
@@ -667,6 +703,7 @@ body{
         border: 4px solid #ff3e3e
     }
     .btn-list{margin: 20px;}
+    .btn-list button{padding:10px 25px;    border-radius: 5px;}
     .hrd-box .checker.on {
         z-index: 22
     }
