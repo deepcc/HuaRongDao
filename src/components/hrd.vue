@@ -711,7 +711,7 @@ body{
     .hrd-box .checker {
         position: absolute;
         background: #24c6fc;
-    border: 1px solid #f8f8f8;
+        border: 1px solid #f8f8f8;
         text-align: center;
         box-sizing: border-box;
         display: flex;
